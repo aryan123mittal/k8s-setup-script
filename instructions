@@ -1,0 +1,40 @@
+
+Execution
+
+Master:
+
+chmod +x full-master-setup.sh
+sudo ./full-master-setup.sh
+
+
+Worker:
+
+chmod +x full-worker-setup.sh
+sudo ./full-worker-setup.sh
+
+
+On master node:
+kubectl get nodes
+
+NAME               STATUS   ROLES           AGE   VERSION
+ip-172-31-44-141   Ready    control-plane   16s   v1.31.14
+
+// Then copy the generated join command from the master and run it on the worker:
+// Create a Long-Lived Token
+
+kubeadm token create --ttl 0 --print-join-command
+
+//--ttl 0 means the token never expires.
+
+//like this
+kubeadm join 172.31.44.141:6443 --token o6ukuw.ay62tgep8oya3knd --discovery-token-ca-cert-hash sha256:f60b1aa068332660e6120e15084d9fa00ea25fc1de02fca5f5e1c01de5cfc898 
+
+// check whether node is connected or not
+kubectl get nodes
+
+NAME               STATUS   ROLES           AGE    VERSION
+ip-172-31-30-6     Ready    <none>          14s    v1.31.14
+ip-172-31-44-141   Ready    control-plane   104s   v1.31.14
+
+
+
